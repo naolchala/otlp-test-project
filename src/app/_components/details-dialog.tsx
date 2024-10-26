@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { LogRecord } from "@/services/api.types";
+import { formatLogDate } from "@/utils/date";
 import { DialogProps, DialogTitle } from "@radix-ui/react-dialog";
 
 interface DetailsDialogProps extends DialogProps {
@@ -43,17 +44,17 @@ export const DetailsDialog = ({ log, ...props }: DetailsDialogProps) => {
 							<span className="text-sm font-bold text-muted-foreground">
 								Logged Time
 							</span>
-							<span className="capitalize">
-								{log.timeUnixNano}
-							</span>
+							<code className="capitalize">
+								{formatLogDate(log.timeUnixNano)}
+							</code>
 						</div>
 						<div className="flex flex-col justify-between flex-1">
-							<span className="text-sm font-bold text-muted-foreground">
+							<span className="text-sm font-semibold text-muted-foreground">
 								Observed Log Time
 							</span>
-							<span className="capitalize">
-								{log.observedTimeUnixNano}
-							</span>
+							<code className="capitalize ">
+								{formatLogDate(log.observedTimeUnixNano)}
+							</code>
 						</div>
 					</div>
 					<div className="flex mb-5">

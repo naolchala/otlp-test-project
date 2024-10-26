@@ -11,7 +11,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { LogRecord, LogsResponse } from "@/services/api.types";
-import dayjs from "dayjs";
+import { formatLogDate } from "@/utils/date";
 import { Fragment, useState } from "react";
 
 interface DataTableProps {
@@ -60,11 +60,11 @@ export const DataTable = ({ data }: DataTableProps) => {
 														</Badge>
 													</TableCell>
 													<TableCell>
-														{dayjs(
-															log.timeUnixNano
-														).format(
-															"YYYY-MM-DD HH:mm:ss"
-														)}
+														<code>
+															{formatLogDate(
+																log.timeUnixNano
+															)}
+														</code>
 													</TableCell>
 													<TableCell>
 														{log.body.stringValue}

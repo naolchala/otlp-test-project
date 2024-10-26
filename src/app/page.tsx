@@ -1,4 +1,5 @@
 import { DataTable } from "@/app/_components/data-table";
+import { HistogramChart } from "@/app/_components/histogram-chart";
 import { getLogs } from "@/services/api";
 
 export default async function Home() {
@@ -13,6 +14,7 @@ export default async function Home() {
 					Here are list of logs from OpenTelemetry
 				</p>
 			</header>
+			<HistogramChart data={data} />
 			<DataTable data={data} />
 		</div>
 	);
