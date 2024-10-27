@@ -8,6 +8,7 @@ export const prepareChartData = (data: LogsResponse) => {
 				return scope.logRecords.map((log) => {
 					return {
 						time: formatLogForChartDate(log.timeUnixNano),
+						severity: log.severityText,
 						count: 1,
 					};
 				});

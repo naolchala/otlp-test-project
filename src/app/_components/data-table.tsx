@@ -10,7 +10,8 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { LogRecord, LogsResponse } from "@/services/api.types";
+import { LogsResponse } from "@/services/api.types";
+import { getStatusColor } from "@/utils/color";
 import { formatLogDate } from "@/utils/date";
 import { Fragment, useState } from "react";
 
@@ -20,7 +21,14 @@ interface DataTableProps {
 
 export const DataTable = ({ data }: DataTableProps) => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [log, setLog] = useState<LogRecord | undefined>(undefined);
+	const [selectedItem, setSelectedItem] = useState<
+		| {
+				log: number;
+				scope: number;
+				resource: number;
+		  }
+		| undefined
+	>();
 
 	const handleClose = () => {
 		setIsOpen(false);
@@ -28,15 +36,25 @@ export const DataTable = ({ data }: DataTableProps) => {
 
 	return (
 		<>
-			<DetailsDialog open={isOpen} onOpenChange={handleClose} log={log} />
+			<DetailsDialog
+				open={isOpen}
+				onOpenChange={handleClose}
+				data={data}
+				position={selectedItem}
+			/>
 			<div className="rounded-md border">
 				<Table>
 					<TableHeader>
 						<TableRow>
-							<TableHead>Severity</TableHead>
-							<TableHead>Time</TableHead>
+							<TableHead>Scope Name</TableHead>
 							<TableHead>Body</TableHead>
-							<TableHead>Resource</TableHead>
+							<TableHead>Time</TableHead>
+							<TableHead className="text-center">
+								Severity
+							</TableHead>
+							<TableHead className="text-right">
+								Severity No.
+							</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -50,27 +68,36 @@ export const DataTable = ({ data }: DataTableProps) => {
 													key={logIndex}
 													className="cursor-pointer"
 													onClick={() => {
-														setLog(log);
+														setSelectedItem({
+															log: logIndex,
+															resource: itemIndex,
+															scope: scopeIndex,
+														});
 														setIsOpen(true);
 													}}
 												>
 													<TableCell>
-														<Badge>
-															{log.severityText}
-														</Badge>
+														{scope.scope.name}
 													</TableCell>
-													<TableCell>
-														<code>
-															{formatLogDate(
-																log.timeUnixNano
-															)}
-														</code>
-													</TableCell>
-													<TableCell>
+													<TableCell className="first-letter:capitalize">
 														{log.body.stringValue}
 													</TableCell>
 													<TableCell>
-														{scope.scope.name}
+														{formatLogDate(
+															log.timeUnixNano
+														)}
+													</TableCell>
+													<TableCell align="center">
+														<Badge
+															variant={getStatusColor(
+																log.severityText
+															)}
+														>
+															{log.severityText}
+														</Badge>
+													</TableCell>
+													<TableCell align="right">
+														{log.severityNumber}
 													</TableCell>
 												</TableRow>
 											)
